@@ -47,6 +47,13 @@
       width: 122px;
     }
   </style>
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+<script>
+  window.TrackJS && TrackJS.install({ 
+    token: "8b214c55a24d427a9e5b0278ea443743"
+    // for more configuration options, see https://docs.trackjs.com
+  });
+</script>
 </head>
 
 <body>
@@ -102,7 +109,322 @@
 
     // Start your code here
     // You may move this JS to another file if you wish
+   
+    errorBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        try {
+          switch(btn.textContent.trim()) {
+            case 'Console Log':
+              console.log("This is a regular log message");
+              break;
+              
+            case 'Console Error':
+              // Demonstrate different ways to create errors
+              try {
+                throw new Error("This is a manually thrown error for demonstration");
+              } catch (demoError) {
+                console.error("Caught demo error:", demoError.message);
+              }
+              break;
+              
+            case 'Console Count':
+              console.count("Counter Demo");
+              break;
+              
+            case 'Console Warn':
+              console.warn("This is a warning message");
+              break;
+              
+            case 'Console Assert':
+              try {
+                console.assert(false, "Assertion failed: This condition is false");
+                // assert doesn't throw in most browsers
+                console.log("Assert doesn't throw an error, but logs to console");
+              } catch (assertError) {
+                console.error("Assert error (unlikely to reach here):", assertError);
+              }
+              break;
+              
+            case 'Console Clear':
+              try {
+                console.clear();
+                console.log("Console has been cleared");
+              } catch (clearError) {
+                console.error("Failed to clear console:", clearError.message);
+              }
+              break;
+              
+            case 'Console Dir':
+              try {
+                let demoObject = {
+                  name: "Demo Object",
+                  type: "Test Data",
+                  properties: {
+                    id: 123,
+                    active: true,
+                    tags: ["demo", "console", "dir"]
+                  }
+                };
+                console.dir(demoObject);
+              } catch (dirError) {
+                console.error("Console.dir failed:", dirError.message);
+              }
+              break;
+              
+            case 'Console dirxml':
+              try {
+                let demoElement = document.querySelector('form');
+                if (!demoElement) {
+                  throw new Error("Form element not found");
+                }
+                console.dirxml(demoElement);
+              } catch (dirxmlError) {
+                console.error("Console.dirxml failed:", dirxmlError.message);
+              }
+              break;
+              
+            case 'Console Group Start':
+              try {
+                console.group("Demo Group Started");
+                console.log("This is the first message in the group");
+                console.log("This is the second message in the group");
+                console.warn("This is a warning message in the group");
+              } catch (groupError) {
+                console.error("Group start failed:", groupError.message);
+              }
+              break;
+              
+            case 'Console Group End':
+              try {
+                console.log("This is the last message in the group");
+                console.groupEnd();
+                console.log("Group ended, this message is outside the group");
+              } catch (groupEndError) {
+                console.error("Group end failed:", groupEndError.message);
+              }
+              break;
+              
+            case 'Console Table':
+              try {
+                let tableData = [
+                  {name: "Alice Johnson", age: 25, major: "Computer Science"},
+                  {name: "Bob Smith", age: 30, major: "Graphic Design"},
+                  {name: "Carol Davis", age: 28, major: "Business Administration"}
+                ];
+                console.table(tableData);
+                
+                // try with potentially problematic data
+                let riskyData = null;
+                console.log("Attempting to table null data...");
+                console.table(riskyData); // This might not work as expected
+                
+              } catch (tableError) {
+                console.error("Console.table failed:", tableError.message);
+              }
+              break;
+              
+            case 'Start Timer':
+              try {
+                console.time("Demo Timer");
+                console.log("Timer has started...");
+              } catch (timerError) {
+                console.error("Timer start failed:", timerError.message);
+              }
+              break;
+              
+            case 'End Timer':
+              try {
+                console.timeEnd("Demo Timer");
+                console.log("Timer has ended");
+                // Try to end a timer that doesn't exist
+                console.timeEnd("Non-existent Timer");
+              } catch (timerEndError) {
+                console.error("Timer end failed:", timerEndError.message);
+              }
+              break;
+              
+            case 'Console Trace':
+              try {
+                function traceDemo() {
+                  function innerFunction() {
+                    function deeperFunction() {
+                      console.trace("Tracing call stack from deep function");
+                    }
+                    deeperFunction();
+                  }
+                  innerFunction();
+                }
+                traceDemo();
+              } catch (traceError) {
+                console.error("Trace failed:", traceError.message);
+              }
+              break;
+              
+            case 'Trigger a Global Error':
+              // Demonstrate different types of errors
+              try {
+                console.log("Triggering various types of errors...");
+                
+                // Reference Error
+                try {
+                  console.log(undefinedVariable);
+                } catch (refError) {
+                  console.error("Reference Error:", refError.message);
+                }
+                
+                // Type Error
+                try {
+                  let nullVar = null;
+                  nullVar.someMethod();
+                } catch (typeError) {
+                  console.error("Type Error:", typeError.message);
+                }
+                
+                // Syntax Error (in eval)
+                try {
+                  eval('invalid syntax here @#$');
+                } catch (syntaxError) {
+                  console.error("Syntax Error:", syntaxError.message);
+                }
+                
+                // JSON Parse Error
+                try {
+                  JSON.parse("invalid json string");
+                } catch (jsonError) {
+                  console.error("JSON Parse Error:", jsonError.message);
+                }
+                
+              } catch (globalError) {
+                console.error("Global error handler:", globalError.message);
+              }
+              break;
+              
+            default:
+              throw new Error(`Unknown button: ${btn.textContent}`);
+          }
+        } catch (generalError) {
+          console.error("Button click error:", generalError.message);
+          console.error("Error occurred with button:", btn.textContent);
+        } finally {
+          console.log(`Button "${btn.textContent}" click handled`);
+        }
+      });
+    });
+
+    // ===== ADDITIONAL ERROR HANDLING DEMONSTRATIONS =====
+
+    // DOM Error Handling Demo
+    function demonstrateDOMErrors() {
+      console.group("DOM Error Handling Demonstrations");
+      
+      // 1. Missing element error
+      try {
+        let missingElement = document.querySelector('#nonexistent-element');
+        if (!missingElement) {
+          throw new Error("Element not found: #nonexistent-element");
+        }
+        missingElement.value = "test";
+      } catch (domError) {
+        console.error("DOM Error 1:", domError.message);
+      }
+      
+      // 2. Property access on null
+      try {
+        let nullElement = document.querySelector('#also-nonexistent');
+        nullElement.innerHTML = "This will fail"; // TypeError
+      } catch (nullError) {
+        console.error("DOM Error 2:", nullError.message);
+      }
+      
+      // 3. Invalid CSS selector
+      try {
+        document.querySelector('>>>invalid-selector<<<');
+      } catch (selectorError) {
+        console.error("DOM Error 3:", selectorError.message);
+      }
+      
+      console.groupEnd();
+    }
+
+    // Async Error Handling Demo
+    async function demonstrateAsyncErrors() {
+      console.group("Async Error Handling Demonstrations");
+      
+      try {
+        await new Promise((resolve, reject) => {
+          setTimeout(() => {
+            if (Math.random() > 0.5) {
+              resolve("Success");
+            } else {
+              reject(new Error("Simulated network failure"));
+            }
+          }, 1000);
+        });
+        console.log("Async operation succeeded");
+      } catch (asyncError) {
+        console.error("Async Error:", asyncError.message);
+      } finally {
+        console.log("Async operation completed");
+      }
+      
+      console.groupEnd();
+    }
+
+    // Storage Error Handling Demo
+    function demonstrateStorageErrors() {
+      console.group("Storage Error Handling Demonstrations");
+      
+      try {
+        // Test localStorage availability
+        if (typeof Storage === "undefined") {
+          throw new Error("Web Storage not supported");
+        }
+        
+        
+        localStorage.setItem('testKey', 'testValue');
+        console.log("Storage test successful");
+        
+        
+        localStorage.setItem('invalidJSON', 'not valid json');
+        let data = JSON.parse(localStorage.getItem('invalidJSON'));
+        
+      } catch (storageError) {
+        console.error("Storage Error:", storageError.message);
+      } finally {
+        // Cleanup
+        try {
+          localStorage.removeItem('testKey');
+          localStorage.removeItem('invalidJSON');
+        } catch (cleanupError) {
+          console.warn("Cleanup failed:", cleanupError.message);
+        }
+      }
+      
+      console.groupEnd();
+    }
+
+    // Auto-run error handling demonstrations on page load
+    window.addEventListener('load', () => {
+      console.log("=== Page loaded, running error handling demonstrations ===");
+      
+      setTimeout(() => {
+        demonstrateDOMErrors();
+      }, 2000);
+      
+      setTimeout(() => {
+        demonstrateStorageErrors();
+      }, 4000);
+      
+      setTimeout(() => {
+        demonstrateAsyncErrors();
+      }, 6000);
+      
+      console.log("=== Error handling demonstrations scheduled ===");
+    });
   </script>
+  <script src="customerrors.js"></script>
+  <script src="error-tracking.js"></script>
+
 </body>
 
 </html>
